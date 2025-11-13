@@ -23,12 +23,33 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="BTC Trading System API", version="1.0.0")
 
 # Enable CORS for React frontend
+# Configure allowed origins for development and production
+import os
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
+if ENVIRONMENT == "production":
+    allowed_origins = [
+        "https://*.vercel.app",  # All Vercel deployments
+        "https://btc-trading-dashboard.vercel.app",  # Production Vercel
+        os.getenv("FRONTEND_URL", ""),  # Custom frontend URL from env
+    ]
+    # Filter out empty strings
+    allowed_origins = [origin for origin in allowed_origins if origin]
+else:
+    allowed_origins = [
+        "http://localhost:3124",
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "*",  # Allow all in development
+    ]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your frontend domain
+    allow_origins=allowed_origins if ENVIRONMENT == "production" else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Global instances

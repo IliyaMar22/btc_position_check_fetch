@@ -7,9 +7,7 @@ import FearGreedWidget from './components/FearGreedWidget';
 import PositionCard from './components/PositionCard';
 import PriceChart from './components/PriceChart';
 import LoadingSpinner from './components/LoadingSpinner';
-
-const API_BASE_URL = 'http://localhost:8123';
-const WS_URL = 'ws://localhost:8123/ws';
+import { API_BASE_URL, WS_URL } from './config';
 
 interface Position {
   timeframe: string;
