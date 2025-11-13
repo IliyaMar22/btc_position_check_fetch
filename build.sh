@@ -22,9 +22,27 @@ fi
 # Step 1: Install Python dependencies
 echo ""
 echo "📦 Step 1: Installing Python dependencies..."
-echo "Note: Railway auto-installs from requirements_backend_api.txt"
-echo "ta-lib is excluded (requires C libraries, fallback implementation available)"
-echo "✅ Python dependencies installed (by Railway)"
+
+# Check if Railway created a venv
+if [ -d "/opt/venv" ]; then
+    echo "Using Railway venv at /opt/venv"
+    /opt/venv/bin/pip install --upgrade pip
+    /opt/venv/bin/pip install -r requirements_backend_api.txt
+    PYTHON_CMD="/opt/venv/bin/python3"
+else
+    echo "Using system Python"
+    python3 -m pip install --upgrade pip
+    python3 -m pip install -r requirements_backend_api.txt
+    PYTHON_CMD="python3"
+fi
+
+# Verify critical dependencies are installed
+echo "Verifying Python dependencies..."
+$PYTHON_CMD -c "import fastapi; print(f'✅ FastAPI {fastapi.__version__} installed')" || echo "❌ FastAPI not found!"
+$PYTHON_CMD -c "import uvicorn; print(f'✅ Uvicorn installed')" || echo "❌ Uvicorn not found!"
+$PYTHON_CMD -c "import pandas; print(f'✅ Pandas {pandas.__version__} installed')" || echo "❌ Pandas not found!"
+
+echo "✅ Python dependencies installed"
 
 # Step 2: Install Node.js dependencies
 echo ""
