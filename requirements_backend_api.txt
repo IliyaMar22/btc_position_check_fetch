@@ -21,8 +21,7 @@ ta-lib==0.4.28  # Optional: requires TA-Lib C library
 # Existing dependencies (from your system)
 matplotlib==3.8.2
 python-binance==1.0.19
-ccxt==4.1.92
+ccxt>=4.0.0  # Use latest compatible version (4.5.18+ available)
 
-# Async support
-asyncio==3.4.3
+# Note: asyncio is part of Python standard library, no need to install
 
