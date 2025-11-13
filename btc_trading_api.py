@@ -174,17 +174,27 @@ import pandas as pd
 
 @app.get("/")
 async def root():
-    """API root endpoint"""
-    return {
-        "message": "BTC Trading System API",
-        "version": "1.0.0",
-        "endpoints": {
-            "positions": "/api/positions",
-            "fear_greed": "/api/fear-greed",
-            "current_price": "/api/current-price",
-            "websocket": "/ws"
+    """API root endpoint - serves React frontend if available, otherwise API info"""
+    # Check if frontend build exists
+    frontend_build_path = Path(__file__).parent / "btc-trading-frontend" / "build"
+    index_path = frontend_build_path / "index.html"
+    
+    if index_path.exists():
+        # Serve React frontend
+        from fastapi.responses import FileResponse
+        return FileResponse(index_path)
+    else:
+        # Return API info if frontend not built
+        return {
+            "message": "BTC Trading System API",
+            "version": "1.0.0",
+            "endpoints": {
+                "positions": "/api/positions",
+                "fear_greed": "/api/fear-greed",
+                "current_price": "/api/current-price",
+                "websocket": "/ws"
+            }
         }
-    }
 
 
 @app.get("/api/positions")
