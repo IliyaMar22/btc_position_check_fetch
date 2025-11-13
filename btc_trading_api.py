@@ -7,6 +7,8 @@ Real-time API with WebSocket support for dynamic updates
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 import asyncio
 import json
 from datetime import datetime
@@ -337,6 +339,39 @@ async def health_check():
         "timestamp": datetime.now().isoformat(),
         "active_connections": len(manager.active_connections)
     }
+
+
+# Serve React frontend static files (for production)
+# Check if the build directory exists
+frontend_build_path = Path(__file__).parent / "btc-trading-frontend" / "build"
+if frontend_build_path.exists():
+    # Mount static files
+    app.mount("/static", StaticFiles(directory=str(frontend_build_path / "static")), name="static")
+    
+    # Serve index.html for all other routes (React Router support)
+    from fastapi.responses import FileResponse
+    
+    @app.get("/{full_path:path}")
+    async def serve_react_app(full_path: str):
+        """Serve React app for all non-API routes"""
+        # Don't serve React app for API routes
+        if full_path.startswith("api/") or full_path.startswith("docs") or full_path.startswith("redoc"):
+            return JSONResponse(status_code=404, content={"detail": "Not found"})
+        
+        # Serve index.html for all other routes
+        index_path = frontend_build_path / "index.html"
+        if index_path.exists():
+            return FileResponse(index_path)
+        else:
+            return JSONResponse(
+                status_code=503,
+                content={"detail": "Frontend not built yet. Run: cd btc-trading-frontend && npm run build"}
+            )
+    
+    logger.info("✅ Serving React frontend from /btc-trading-frontend/build")
+else:
+    logger.warning("⚠️  Frontend build directory not found. API-only mode.")
+    logger.warning("   To enable frontend, run: cd btc-trading-frontend && npm run build")
 
 
 if __name__ == "__main__":

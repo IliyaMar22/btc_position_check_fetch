@@ -2,7 +2,7 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "pip install -r requirements_backend_api.txt"
+    "buildCommand": "pip install -r requirements_backend_api.txt && cd btc-trading-frontend && npm install && npm run build && cd .."
   },
   "deploy": {
     "startCommand": "python3 btc_trading_api.py",

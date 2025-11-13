@@ -283,6 +283,44 @@ Educational use only. Not for commercial distribution.
 - [x] Support/Resistance detection
 - [x] Fibonacci retracements
 
+## 🚂 Deployment to Production
+
+### **Deploy Everything to Railway** (Recommended)
+
+Deploy the entire full-stack application to Railway in **5 minutes**!
+
+**Full guide:** See **[RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md)**
+
+**Quick steps:**
+1. ✅ Push code to GitHub (already done!)
+2. 🚂 Go to https://railway.app and sign in
+3. 🎯 Create new project from GitHub repo
+4. ⏳ Wait 2-3 minutes for auto-build
+5. 🎉 Done! Your app is live!
+
+**What Railway does automatically:**
+- Installs Python dependencies
+- Installs Node.js dependencies
+- Builds React frontend
+- Starts FastAPI backend
+- Serves everything on one domain
+- Provides HTTPS + WebSocket support
+
+**Benefits:**
+- ✅ One platform (simpler than separate hosting)
+- ✅ No CORS issues (same domain)
+- ✅ WebSocket support (persistent connections)
+- ✅ Auto-deploy from GitHub
+- ✅ Cost-effective (~$5-10/month)
+
+**Your deployed URLs:**
+```
+🌍 Main App:     https://your-app.railway.app
+📊 Dashboard:    https://your-app.railway.app/
+📡 API Docs:     https://your-app.railway.app/docs
+🔌 WebSocket:    wss://your-app.railway.app/ws
+```
+
 ## 🚀 Getting Help
 
 For issues or questions:
@@ -290,6 +328,7 @@ For issues or questions:
 2. Review the [API documentation](http://localhost:8123/docs)
 3. Check browser console for errors
 4. Review backend logs
+5. See [Railway Deployment Guide](RAILWAY_DEPLOYMENT_GUIDE.md) for production issues
 
 ---
 
