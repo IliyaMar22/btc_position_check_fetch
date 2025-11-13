@@ -6,7 +6,7 @@ nixPkgs = ["python310", "nodejs-18_x"]
 
 [phases.install]
 cmds = [
-  "pip install -r requirements_backend_api.txt",
+  "pip3 install -r requirements_backend_api.txt",
   "cd btc-trading-frontend && npm install && cd .."
 ]
 
