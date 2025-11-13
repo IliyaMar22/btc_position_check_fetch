@@ -1,0 +1,9 @@
+# Nixpacks Configuration for Railway
+# This tells Railway to install both Python and Node.js
+
+[phases.setup]
+nixPkgs = ["python310", "nodejs-18_x"]
+
+# Railway will auto-install Python dependencies from requirements_backend_api.txt
+# We just need to ensure Node.js is available for the build script
+
