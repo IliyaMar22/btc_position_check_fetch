@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+echo "🚂 Railway Build Script Starting..."
+echo "======================================"
+
+# Step 1: Install Python dependencies
+echo ""
+echo "📦 Step 1: Installing Python dependencies..."
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements_backend_api.txt
+echo "✅ Python dependencies installed"
+
+# Step 2: Install Node.js dependencies
+echo ""
+echo "📦 Step 2: Installing Node.js dependencies..."
+cd btc-trading-frontend
+npm install
+echo "✅ Node.js dependencies installed"
+
+# Step 3: Build React frontend
+echo ""
+echo "🏗️  Step 3: Building React frontend..."
+npm run build
+cd ..
+echo "✅ Frontend built successfully"
+
+echo ""
+echo "======================================"
+echo "✅ Railway Build Complete!"
+echo "======================================"
+
