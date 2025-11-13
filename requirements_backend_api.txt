@@ -1,0 +1,28 @@
+# Bitcoin Trading System - Backend API Requirements
+# Install with: pip3 install -r requirements_backend_api.txt
+
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+websockets==12.0
+
+# Data Processing
+pandas==2.1.3
+numpy==1.26.2
+
+# HTTP Requests
+requests==2.31.0
+aiohttp==3.9.1
+
+# Technical Analysis
+ta-lib==0.4.28  # Optional: requires TA-Lib C library
+# If ta-lib fails, technical analysis is already implemented in advanced_technical_analysis.py
+
+# Existing dependencies (from your system)
+matplotlib==3.8.2
+python-binance==1.0.19
+ccxt==4.1.92
+
+# Async support
+asyncio==3.4.3
+

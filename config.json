@@ -1,0 +1,44 @@
+{
+  "trading": {
+    "ema_fast": 20,
+    "ema_slow": 50,
+    "rsi_period": 14,
+    "rsi_overbought": 70,
+    "rsi_oversold": 30,
+    "rsi_exit": 80,
+    "macd_fast": 12,
+    "macd_slow": 26,
+    "macd_signal": 9,
+    "fib_lookback": 100
+  },
+  "risk": {
+    "initial_capital": 10000.0,
+    "max_position_size_pct": 100.0,
+    "max_risk_per_trade_pct": 2.0,
+    "max_daily_loss_pct": 5.0,
+    "max_open_positions": 1,
+    "min_risk_reward_ratio": 1.5,
+    "use_trailing_stop": true,
+    "trailing_stop_pct": 2.0
+  },
+  "data": {
+    "symbol": "btcusdt",
+    "interval": "1m",
+    "max_buffer_size": 1000,
+    "reconnect_delay": 5,
+    "max_reconnect_attempts": 10
+  },
+  "webhook": {
+    "enabled": false,
+    "discord_url": null,
+    "telegram_bot_token": null,
+    "telegram_chat_id": null,
+    "custom_webhook_url": null
+  },
+  "enable_paper_trading": true,
+  "enable_risk_management": true,
+  "enable_fear_greed_index": true,
+  "log_level": "INFO",
+  "log_file": "trading_system.log"
+}
+

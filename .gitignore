@@ -1,0 +1,103 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+backend.log
+frontend.log
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules (frontend will have its own .gitignore)
+btc-trading-frontend/node_modules/
+btc-trading-frontend/build/
+
+# Other projects (exclude everything except BTC trading system)
+ACCA_*
+acca-f4-study-app/
+Group_Projekt_IceCream/
+MultiplayerRoulette/
+PDF_Reports/
+atelier-del-gelato/
+autoentry-ai-nextjs/
+autoentry_ai/
+bar-national*/
+bitcoin-dca-simulation/
+chinese-ev-analyzer/
+chinese_ev_comparison.csv
+chinese_ev_report.txt
+chinese_ev_scraper.py
+dhaka-catering-reference/
+dostavki-aleksievi/
+financial-review-pipeline/
+flappy-bird-game/
+hbar-oracle/
+iliicheto-btc-analysis/
+iliya-m-silver-price/
+iliya_fear_and_greed_btc_check/
+mr-markovski-roulette/
+tavex-gold-simulation/
+trading_analyzer/
+
+# Extracted chapters and raw data
+chapters_extracted.json
+raw_chapters/
+Chapter_*.txt
+ALL_CHAPTERS_COMPLETE.md
+CONTENT_UPDATE_SUMMARY.md
+FINAL_DELIVERY_SUMMARY.md
+
+# IFRS files
+IFRS_*
+ifrs_*
+
+# Other study materials (but keep BTC trading docs)
+!IMPROVEMENTS_SUMMARY.md
+!ADVANCED_SYSTEM_README.md
+READ_THIS_NOW.md
+JUPYTER_USAGE.md
+START_HERE_README.md
+
+# Temporary files
+ngrok
+ngrok.zip
+demo.py
+create_comprehensive_pdfs.py
+generate_*.py
+reformat_all_chapters.py
+test_enhanced_script.py
+
+# Old positions and analysis images
+positions_log.json
+ultra_advanced_cpi_analysis.png
+ultra_advanced_cpi_dashboard.html
+
+# Special characters files
+*✅*
+*🎉*
+*.md.bak
+
