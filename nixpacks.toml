@@ -2,7 +2,7 @@
 # This tells Railway how to build and deploy the application
 
 [phases.setup]
-nixPkgs = ["python310", "nodejs-18_x", "npm-9_x"]
+nixPkgs = ["python310", "nodejs-18_x"]
 
 [phases.install]
 cmds = [
