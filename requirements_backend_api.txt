@@ -15,8 +15,8 @@ requests==2.31.0
 aiohttp==3.9.1
 
 # Technical Analysis
-ta-lib==0.4.28  # Optional: requires TA-Lib C library
-# If ta-lib fails, technical analysis is already implemented in advanced_technical_analysis.py
+# ta-lib==0.4.28  # REMOVED: Requires TA-Lib C library not available on Railway
+# Technical analysis is already implemented in advanced_technical_analysis.py (no ta-lib needed)
 
 # Existing dependencies (from your system)
 matplotlib==3.8.2
