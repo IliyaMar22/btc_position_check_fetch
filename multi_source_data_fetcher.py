@@ -87,6 +87,11 @@ class CoinGeckoDataFetcher:
     
     def __init__(self):
         self.base_url = "https://api.coingecko.com/api/v3"
+        # Cache for price to avoid rate limits
+        self._price_cache = {}
+        self._cache_timeout = 30  # Cache for 30 seconds
+        self._last_request_time = 0
+        self._min_request_interval = 1.0  # Minimum 1 second between requests
         
     def get_ohlc(self, coin_id: str = "bitcoin", vs_currency: str = "usd", days: int = 30) -> pd.DataFrame:
         """
@@ -124,18 +129,65 @@ class CoinGeckoDataFetcher:
             return pd.DataFrame()
     
     def get_current_price(self, coin_id: str = "bitcoin", vs_currency: str = "usd") -> Optional[float]:
-        """Get current price"""
+        """Get current price with caching and rate limiting"""
+        cache_key = f"{coin_id}_{vs_currency}"
+        current_time = time.time()
+        
+        # Check cache first
+        if cache_key in self._price_cache:
+            cached_data = self._price_cache[cache_key]
+            if current_time - cached_data['timestamp'] < self._cache_timeout:
+                return cached_data['price']
+        
+        # Rate limiting: ensure minimum interval between requests
+        time_since_last = current_time - self._last_request_time
+        if time_since_last < self._min_request_interval:
+            time.sleep(self._min_request_interval - time_since_last)
+        
         try:
             url = f"{self.base_url}/simple/price"
             params = {
                 'ids': coin_id,
                 'vs_currencies': vs_currency
             }
+            self._last_request_time = time.time()
             response = requests.get(url, params=params, timeout=5)
+            
+            # Handle rate limiting
+            if response.status_code == 429:
+                logger.warning("CoinGecko rate limit hit. Using cached price or returning None.")
+                # Return cached price if available, even if expired
+                if cache_key in self._price_cache:
+                    logger.info("Returning expired cached price due to rate limit")
+                    return self._price_cache[cache_key]['price']
+                return None
+            
             response.raise_for_status()
-            return float(response.json()[coin_id][vs_currency])
+            price = float(response.json()[coin_id][vs_currency])
+            
+            # Update cache
+            self._price_cache[cache_key] = {
+                'price': price,
+                'timestamp': current_time
+            }
+            
+            return price
+            
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 429:
+                logger.warning("CoinGecko rate limit hit. Using cached price or returning None.")
+                if cache_key in self._price_cache:
+                    logger.info("Returning expired cached price due to rate limit")
+                    return self._price_cache[cache_key]['price']
+            else:
+                logger.error(f"Error fetching CoinGecko price: {e}")
+            return None
         except Exception as e:
             logger.error(f"Error fetching CoinGecko price: {e}")
+            # Return cached price if available
+            if cache_key in self._price_cache:
+                logger.info("Returning cached price due to error")
+                return self._price_cache[cache_key]['price']
             return None
     
     def get_market_data(self, coin_id: str = "bitcoin") -> Dict:
@@ -296,24 +348,29 @@ class MultiSourceDataAggregator:
         """Get current price from all sources for comparison"""
         prices = {}
         
-        # Binance
+        # Binance (primary source - always try this first)
         binance_price = self.binance.get_current_price(symbol)
         if binance_price:
             prices['binance'] = binance_price
+            prices['average'] = binance_price  # Use Binance as average if available
         
-        # CoinGecko
-        coin_id = self._symbol_to_coingecko_id(symbol)
-        coingecko_price = self.coingecko.get_current_price(coin_id)
-        if coingecko_price:
-            prices['coingecko'] = coingecko_price
+        # CoinGecko (fallback only - skip if Binance works to avoid rate limits)
+        # Only fetch from CoinGecko if Binance failed or we want comparison
+        # For now, skip CoinGecko to avoid rate limit issues
+        # coin_id = self._symbol_to_coingecko_id(symbol)
+        # coingecko_price = self.coingecko.get_current_price(coin_id)
+        # if coingecko_price:
+        #     prices['coingecko'] = coingecko_price
         
-        if prices:
-            avg_price = np.mean(list(prices.values()))
+        # Recalculate average if we have multiple sources
+        if len(prices) > 1:
+            avg_price = np.mean([p for k, p in prices.items() if k != 'average'])
             prices['average'] = avg_price
             
             # Calculate spread
-            if len(prices) > 2:
-                spread = (max(prices.values()) - min(prices.values())) / avg_price * 100
+            if len([k for k in prices.keys() if k != 'average' and k != 'spread_pct']) > 1:
+                price_values = [p for k, p in prices.items() if k != 'average' and k != 'spread_pct']
+                spread = (max(price_values) - min(price_values)) / avg_price * 100
                 prices['spread_pct'] = spread
         
         return prices
