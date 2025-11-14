@@ -179,12 +179,19 @@ async def root():
     frontend_build_path = Path(__file__).parent / "btc-trading-frontend" / "build"
     index_path = frontend_build_path / "index.html"
     
+    # Debug logging
+    logger.info(f"Checking frontend at: {index_path}")
+    logger.info(f"Path exists: {index_path.exists()}")
+    logger.info(f"Build dir exists: {frontend_build_path.exists()}")
+    
     if index_path.exists():
         # Serve React frontend
         from fastapi.responses import FileResponse
+        logger.info(f"Serving React frontend from: {index_path}")
         return FileResponse(index_path)
     else:
         # Return API info if frontend not built
+        logger.warning(f"Frontend not found at {index_path}, serving API info")
         return {
             "message": "BTC Trading System API",
             "version": "1.0.0",
